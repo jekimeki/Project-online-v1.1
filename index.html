@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+	<script>
+  // Deteksi apakah web dibuka dari dalam WhatsApp / Instagram In-App Browser
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  const isInApp = (ua.indexOf("WhatsApp") > -1) || (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1);
+
+  if (isInApp) {
+      // Tampilkan peringatan jika dibuka dari dalam WhatsApp
+      alert("⚠️ Agar Video Call & Koneksi LDR Lancar, harap salin link ini dan buka langsung melalui aplikasi SAFARI atau CHROME di HP Anda!");
+  }
+</script>
+
+	
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ular Tangga Cinta💕</title>
