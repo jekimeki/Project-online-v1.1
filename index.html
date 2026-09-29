@@ -239,7 +239,7 @@
             line-height: 1;
         }
 
-        /* FLOATING CHAT (Z-Index dinaikkan ke 2500 agar berada DI ATAS pop-up modal/hukuman) */
+        /* FLOATING CHAT */
         .floating-chat-container {
             display: none;
             width: 100%;
@@ -417,54 +417,108 @@
         .token-1 { background-color: #ef233c; } 
         .token-2 { background-color: #3a86ff; } 
 
+        /* Modal Tantangan & Video Call Ala WhatsApp */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(74, 21, 37, 0.82);
+            background: rgba(74, 21, 37, 0.88);
             justify-content: center;
             align-items: center;
-            z-index: 2000; /* Modal berada di bawah chat (2500) agar chat bisa diklik */
+            z-index: 2000;
         }
 
         .modal-content {
             background: #fff0f3;
             border: 2px solid #d90429;
-            padding: 12px 14px;
+            padding: 10px 12px;
             border-radius: 14px;
             text-align: center;
-            max-width: 300px;
-            width: 90%;
+            max-width: 320px;
+            width: 92%;
             box-shadow: 0 8px 25px rgba(89, 13, 34, 0.4);
-            max-height: 85vh;
+            max-height: 92vh;
             overflow-y: auto;
         }
 
-        .modal-content h3 { color: #d90429; margin-top: 0; font-size: 0.9rem; }
-        .modal-content p { font-size: 0.75rem; color: #590d22; line-height: 1.3; margin: 5px 0; }
-        .modal-illustration { background: #ffe5ec; border: 1px dashed #ff758f; border-radius: 6px; padding: 6px; font-size: 0.68rem; color: #800f2f; margin: 5px 0; text-align: left; }
+        .modal-content h3 { color: #d90429; margin-top: 0; font-size: 0.85rem; }
+        .modal-content p { font-size: 0.7rem; color: #590d22; line-height: 1.25; margin: 4px 0; }
+        .modal-illustration { background: #ffe5ec; border: 1px dashed #ff758f; border-radius: 6px; padding: 5px; font-size: 0.62rem; color: #800f2f; margin: 4px 0; text-align: left; }
+
+        /* Container Video Call Style WhatsApp (Lawan Besar di Latar, Diri Sendiri Kecil Melayang) */
+        .video-container-wa {
+            display: none;
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 6px 0;
+            border: 1.5px solid #ff758f;
+        }
+
+        /* Video Lawan (Besar / Full) */
+        #remote-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Video Diri Sendiri (Kecil di Pojok Kanan Atas) */
+        .self-video-box {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 75px;
+            aspect-ratio: 3 / 4;
+            background: #222;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1.5px solid #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        #local-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-label-wa {
+            position: absolute;
+            bottom: 2px;
+            left: 4px;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            font-size: 0.48rem;
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
 
         .timer-display {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 900;
             color: #d90429;
-            margin: 5px 0;
+            margin: 4px 0;
             background: #fff;
             border: 1.5px dashed #ff758f;
             border-radius: 6px;
             padding: 2px;
+            display: none;
         }
 
         .btn-action-group {
             display: flex;
-            gap: 6px;
+            gap: 5px;
             justify-content: center;
-            margin-top: 6px;
+            margin-top: 5px;
             flex-wrap: wrap;
         }
 
-        .btn-start-timer { background: linear-gradient(135deg, #2b9348, #55a630); color: white; border: none; padding: 6px 14px; border-radius: 8px; font-weight: bold; font-size: 0.75rem; cursor: pointer; width: 100%; }
-        .btn-action, .btn-skip { background: linear-gradient(45deg, #ef233c, #d90429); color: white; border: none; padding: 5px 10px; border-radius: 8px; font-weight: bold; font-size: 0.7rem; cursor: pointer; }
+        .btn-start-timer { background: linear-gradient(135deg, #2b9348, #55a630); color: white; border: none; padding: 6px 12px; border-radius: 8px; font-weight: bold; font-size: 0.7rem; cursor: pointer; width: 100%; }
+        .btn-action, .btn-skip { background: linear-gradient(45deg, #ef233c, #d90429); color: white; border: none; padding: 5px 10px; border-radius: 8px; font-weight: bold; font-size: 0.68rem; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -516,7 +570,7 @@
             </div>
         </div>
 
-        <!-- FLOATING CHAT (Z-Index diset 2500 agar selalu bisa diklik bahkan saat pop-up modal tantangan/hukuman terbuka) -->
+        <!-- FLOATING CHAT -->
         <div class="floating-chat-container" id="floating-chat-box">
             <div class="chat-log" id="chat-log-content">💬 <i>Obrolan terhubung...</i></div>
             <div class="chat-input-row">
@@ -549,12 +603,23 @@
         </div>
     </div>
 
-    <!-- Modal Tantangan & Timer -->
+    <!-- Modal Tantangan, Video Call WhatsApp Style, & Timer -->
     <div class="modal" id="challenge-modal">
         <div class="modal-content">
             <h3 id="modal-title">🔥 Sensasi Intim</h3>
             <p id="modal-text">Tantangan...</p>
             <div id="modal-illustration-container"></div>
+            
+            <!-- Video Call Style WhatsApp (Lawan Besar di Belakang, Diri Sendiri Kecil di Pojok Kanan Atas) -->
+            <div class="video-container-wa" id="video-container-wa">
+                <video id="remote-video" autoplay playsinline></video>
+                <div class="video-label-wa">Pasangan</div>
+                
+                <div class="self-video-box">
+                    <video id="local-video" autoplay playsinline muted></video>
+                </div>
+            </div>
+
             <div class="timer-display" id="timer-box">2:00</div>
             <div class="btn-action-group" id="modal-btn-container"></div>
         </div>
@@ -564,6 +629,8 @@
         let isOnlineLDR = false;
         let peer = null;
         let conn = null;
+        let callObj = null;
+        let localStream = null;
         let isHost = false;
         let myRole = ''; 
 
@@ -680,10 +747,68 @@
                 }
             });
 
+            peer.on('call', async (incomingCall) => {
+                try {
+                    if (!localStream) {
+                        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    }
+                    incomingCall.answer(localStream);
+                    callObj = incomingCall;
+                    incomingCall.on('stream', (remoteStream) => {
+                        const remoteVideo = document.getElementById('remote-video');
+                        remoteVideo.srcObject = remoteStream;
+                    });
+                } catch (err) {
+                    alert("Gagal mengakses kamera/mikrofon: " + err.message);
+                }
+            });
+
             conn.on('close', () => {
                 alert("Koneksi dengan pasangan terputus.");
                 location.reload();
             });
+        }
+
+        async function startVideoCallSession() {
+            if (!isOnlineLDR) return;
+            const videoContainer = document.getElementById('video-container-wa');
+            videoContainer.style.display = 'block';
+
+            try {
+                if (!localStream) {
+                    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                }
+                const localVideo = document.getElementById('local-video');
+                localVideo.srcObject = localStream;
+
+                if (isHost && conn && conn.peer) {
+                    let partnerPeerId = conn.peer;
+                    let outCall = peer.call(partnerPeerId, localStream);
+                    if (outCall) {
+                        callObj = outCall;
+                        outCall.on('stream', (remoteStream) => {
+                            const remoteVideo = document.getElementById('remote-video');
+                            remoteVideo.srcObject = remoteStream;
+                        });
+                    }
+                }
+            } catch (err) {
+                alert("Izinkan akses kamera dan mikrofon untuk video call: " + err.message);
+            }
+        }
+
+        function stopVideoCallSession() {
+            const videoContainer = document.getElementById('video-container-wa');
+            videoContainer.style.display = 'none';
+
+            if (callObj) {
+                callObj.close();
+                callObj = null;
+            }
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+                localStream = null;
+            }
         }
 
         function sendQuickChat(msg) {
@@ -1325,7 +1450,7 @@
             timerBox.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
 
             btnGroup.innerHTML = `
-                <button class="btn-start-timer" onclick="startTimerCountdown()">▶ Mulai Timer Pijat (3 Menit)</button>
+                <button class="btn-start-timer" onclick="startTimerAndVideo()">📹 Hubungkan Video Call & Mulai</button>
                 <button class="btn-skip" onclick="skipWinTimer()">Skip ⏭</button>
             `;
         }
@@ -1370,15 +1495,14 @@
 
             const timerBox = document.getElementById('timer-box');
             const btnGroup = document.getElementById('modal-btn-container');
+            timerBox.style.display = 'none';
 
             if (isFinalWin) {
-                timerBox.style.display = 'none';
                 btnGroup.innerHTML = isOnlineLDR && !isHost ? `<p style="font-size:0.65rem; color:#d90429; font-weight:bold;">Menunggu Host menutup game...</p>` : `<button class="btn-action" onclick="backToLobby()">🏠 Kembali ke Lobi</button>`;
                 return;
             }
 
             if (seconds === 0) {
-                timerBox.style.display = 'none';
                 btnGroup.innerHTML = isOnlineLDR && !isHost ? `<p style="font-size:0.65rem; color:#d90429; font-weight:bold;">Menunggu Host melanjutkan...</p>` : `<button class="btn-action" onclick="closeModal()">Lanjutkan ✨</button>`;
                 return;
             }
@@ -1386,14 +1510,12 @@
             currentTimerSeconds = seconds;
             let m = Math.floor(seconds / 60);
             let s = seconds % 60;
-            timerBox.style.display = 'block';
-            timerBox.innerText = m > 0 ? `${m}:${s < 10 ? '0' : ''}${s}` : `${seconds}s`;
 
             if (isOnlineLDR && !isHost) {
-                btnGroup.innerHTML = `<p style="font-size:0.65rem; color:#d90429; font-weight:bold;">Menunggu Host mengontrol timer...</p>`;
+                btnGroup.innerHTML = `<p style="font-size:0.65rem; color:#d90429; font-weight:bold;">Menunggu Host mengontrol tantangan...</p>`;
             } else {
                 btnGroup.innerHTML = `
-                    <button class="btn-start-timer" onclick="startTimerCountdown()">▶ Mulai Tantangan</button>
+                    <button class="btn-start-timer" id="btn-main-action" onclick="handleFirstModalClick(${seconds})">📹 Hubungkan Video Call Dulu</button>
                     <button class="btn-skip" onclick="closeModal()">Skip ⏭</button>
                 `;
             }
@@ -1407,17 +1529,44 @@
 
             const timerBox = document.getElementById('timer-box');
             const btnGroup = document.getElementById('modal-btn-container');
+            timerBox.style.display = 'none';
             
-            if (seconds === 0) {
-                timerBox.style.display = 'none';
-            } else {
-                currentTimerSeconds = seconds;
-                let m = Math.floor(seconds / 60);
-                let s = seconds % 60;
-                timerBox.style.display = 'block';
-                timerBox.innerText = m > 0 ? `${m}:${s < 10 ? '0' : ''}${s}` : `${seconds}s`;
+            currentTimerSeconds = seconds;
+            if (isOnlineLDR && !isHost) {
+                btnGroup.innerHTML = `<p style="font-size:0.65rem; color:#d90429; font-weight:bold;">Menunggu Host menghubungkan video call...</p>`;
             }
-            btnGroup.innerHTML = `<p style="font-size:0.65rem; color:#d90429; font-weight:bold;">Menunggu Host mengontrol timer...</p>`;
+        }
+
+        function handleFirstModalClick(seconds) {
+            if (isOnlineLDR) {
+                startVideoCallSession();
+            }
+
+            const btnGroup = document.getElementById('modal-btn-container');
+            const timerBox = document.getElementById('timer-box');
+            let m = Math.floor(seconds / 60);
+            let s = seconds % 60;
+            timerBox.style.display = 'block';
+            timerBox.innerText = m > 0 ? `${m}:${s < 10 ? '0' : ''}${s}` : `${seconds}s`;
+
+            if (isOnlineLDR && isHost && conn && conn.open) {
+                conn.send({
+                    type: 'start-timer',
+                    seconds: seconds
+                });
+            }
+
+            btnGroup.innerHTML = `
+                <button class="btn-start-timer" onclick="startTimerCountdown()">▶ Mulai Timer Tantangan</button>
+                <button class="btn-skip" onclick="closeModal()">Skip ⏭</button>
+            `;
+        }
+
+        function startTimerAndVideo() {
+            if (isOnlineLDR) {
+                startVideoCallSession();
+            }
+            startTimerCountdown();
         }
 
         function startTimerCountdown() {
@@ -1431,6 +1580,14 @@
         }
 
         function startTimerCountdownRemote(seconds) {
+            if (isOnlineLDR) {
+                startVideoCallSession();
+            }
+            const timerBox = document.getElementById('timer-box');
+            let m = Math.floor(seconds / 60);
+            let s = seconds % 60;
+            timerBox.style.display = 'block';
+            timerBox.innerText = m > 0 ? `${m}:${s < 10 ? '0' : ''}${s}` : `${seconds}s`;
             runCountdownLogic(seconds);
         }
 
@@ -1441,7 +1598,7 @@
             let isWinModal = document.getElementById('modal-title').innerText.includes("Menang Babak 1");
 
             if (isOnlineLDR && !isHost) {
-                btnGroup.innerHTML = `<p style="font-size:0.65rem; color:#d90429; font-weight:bold;">Timer sedang berjalan oleh Host...</p>`;
+                btnGroup.innerHTML = `<p style="font-size:0.65rem; color:#d90429; font-weight:bold;">Timer sedang berjalan...</p>`;
             } else {
                 if (isWinModal) {
                     btnGroup.innerHTML = `<button class="btn-skip" onclick="skipWinTimer()">Skip ⏭</button>`;
@@ -1494,6 +1651,7 @@
 
         function closeModalRemote() {
             if (countdownInterval) clearInterval(countdownInterval);
+            stopVideoCallSession();
             document.getElementById('challenge-modal').style.display = 'none';
             isRolling = false;
         }
