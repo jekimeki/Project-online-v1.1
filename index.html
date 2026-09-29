@@ -134,7 +134,7 @@
             width: 100%;
             height: 100vh;
             height: 100dvh;
-            padding: 6px 10px;
+            padding: 4px 8px;
             background: transparent;
             overflow: hidden;
             position: relative;
@@ -150,14 +150,14 @@
 
         header h1 {
             color: #c9184a;
-            font-size: 0.98rem;
+            font-size: 0.92rem;
             margin: 0;
             font-weight: 800;
             text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
         }
 
         .round-badge {
-            font-size: 0.6rem;
+            font-size: 0.58rem;
             background: #ffffff;
             color: #d90429;
             padding: 1px 8px;
@@ -176,14 +176,14 @@
             width: 100%;
             flex-grow: 1;
             min-height: 0;
-            padding: 2px 0;
+            padding: 1px 0;
         }
 
         .board-wrapper {
             position: relative;
             aspect-ratio: 1 / 1;
             width: 100%;
-            max-width: min(85vw, 65vh);
+            max-width: min(82vw, 55vh);
             background-color: #d90429;
             padding: 2px;
             border-radius: 8px;
@@ -234,32 +234,30 @@
         }
 
         .cell-icon {
-            font-size: clamp(0.8rem, 3vw, 0.5rem);
+            font-size: clamp(0.7rem, 2.5vw, 0.45rem);
             text-align: center;
             line-height: 1;
         }
 
-        /* Floating Quick Chat + Input Manual */
+        /* Floating Chat (Diposisikan di atas panel kontrol agar sangat mudah terlihat dan diakses) */
         .floating-chat-container {
             display: none;
-            position: fixed;
-            bottom: 75px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 330px;
+            width: 100%;
+            max-width: min(85vw, 65vh);
             background: rgba(255, 255, 255, 0.95);
             border: 1.5px solid #ff758f;
             border-radius: 10px;
-            padding: 5px 8px;
+            padding: 4px 8px;
             z-index: 1500;
             box-shadow: 0 4px 15px rgba(217, 4, 41, 0.25);
+            flex-shrink: 0;
+            margin-bottom: 3px;
         }
 
         .chat-log {
-            font-size: 0.6rem;
+            font-size: 0.58rem;
             color: #590d22;
-            max-height: 36px;
+            max-height: 32px;
             overflow-y: auto;
             margin-bottom: 3px;
             padding: 2px;
@@ -272,13 +270,13 @@
         .chat-input-row {
             display: flex;
             gap: 4px;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .chat-input-row input {
             flex-grow: 1;
-            padding: 4px 6px;
-            font-size: 0.65rem;
+            padding: 5px 8px;
+            font-size: 0.7rem;
             border: 1px solid #ff758f;
             border-radius: 6px;
             outline: none;
@@ -290,9 +288,9 @@
             background: linear-gradient(135deg, #ff4d6d, #d90429);
             color: white;
             border: none;
-            padding: 4px 8px;
+            padding: 5px 10px;
             border-radius: 6px;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             font-weight: bold;
             cursor: pointer;
         }
@@ -302,7 +300,7 @@
             gap: 4px;
             overflow-x: auto;
             white-space: nowrap;
-            padding-bottom: 2px;
+            padding-bottom: 1px;
         }
 
         .quick-btn {
@@ -325,7 +323,7 @@
             backdrop-filter: blur(5px);
             border: 1.5px solid #ff758f;
             border-radius: 12px;
-            padding: 5px 10px;
+            padding: 4px 10px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -369,14 +367,14 @@
         }
 
         .dice-btn {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border: 2px solid #fff;
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: white;
             cursor: pointer;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
@@ -388,7 +386,7 @@
         .dice-btn:active { transform: scale(0.92); }
 
         .dadu-status-text {
-            font-size: 0.5rem;
+            font-size: 0.48rem;
             font-weight: bold;
             color: #800f2f;
         }
@@ -504,21 +502,6 @@
         </div>
     </div>
 
-    <!-- FLOATING CHAT DENGAN INPUT MANUAL & QUICK BUTTONS -->
-    <div class="floating-chat-container" id="floating-chat-box">
-        <div class="chat-log" id="chat-log-content">💬 <i>Obrolan terhubung...</i></div>
-        <div class="chat-input-row">
-            <input type="text" id="chat-input-field" placeholder="Ketik pesan / godaan..." onkeypress="handleChatKeyPress(event)">
-            <button class="chat-send-btn" onclick="sendTypedChat()">Kirim</button>
-        </div>
-        <div class="chat-quick-btns">
-            <button class="quick-btn" onclick="sendQuickChat('⚡ Cepat lakuin hukumannya!')">⚡ Cepat Hukuman</button>
-            <button class="quick-btn" onclick="sendQuickChat('🎁 Mana hadiahnya sayang?')">🎁 Mana Hadiah</button>
-            <button class="quick-btn" onclick="sendQuickChat('😉 Jangan lama-lama ya!')">😉 Jangan Lama</button>
-            <button class="quick-btn" onclick="sendQuickChat('🔥 Udah siap nih!')">🔥 Udah Siap</button>
-        </div>
-    </div>
-
     <!-- LAYOUT UTAMA PERMAINAN -->
     <div class="game-layout" id="game-screen">
         <header>
@@ -530,6 +513,21 @@
             <div class="board-wrapper">
                 <svg class="board-svg" id="board-svg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
                 <div class="board" id="board"></div>
+            </div>
+        </div>
+
+        <!-- FLOATING CHAT (Sekarang posisinya pas di atas panel kontrol dadu, dijamin terlihat) -->
+        <div class="floating-chat-container" id="floating-chat-box">
+            <div class="chat-log" id="chat-log-content">💬 <i>Obrolan terhubung...</i></div>
+            <div class="chat-input-row">
+                <input type="text" id="chat-input-field" placeholder="Ketik pesan / godaan..." onkeypress="handleChatKeyPress(event)">
+                <button class="chat-send-btn" onclick="sendTypedChat()">Kirim</button>
+            </div>
+            <div class="chat-quick-btns">
+                <button class="quick-btn" onclick="sendQuickChat('⚡ Cepat lakuin hukumannya!')">⚡ Cepat Hukuman</button>
+                <button class="quick-btn" onclick="sendQuickChat('🎁 Mana hadiahnya sayang?')">🎁 Mana Hadiah</button>
+                <button class="quick-btn" onclick="sendQuickChat('😉 Jangan lama-lama ya!')">😉 Jangan Lama</button>
+                <button class="quick-btn" onclick="sendQuickChat('🔥 Udah siap nih!')">🔥 Udah Siap</button>
             </div>
         </div>
 
