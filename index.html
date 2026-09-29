@@ -239,7 +239,7 @@
             line-height: 1;
         }
 
-        /* Floating Quick Chat */
+        /* Floating Quick Chat + Input Manual */
         .floating-chat-container {
             display: none;
             position: fixed;
@@ -259,14 +259,42 @@
         .chat-log {
             font-size: 0.6rem;
             color: #590d22;
-            max-height: 40px;
+            max-height: 36px;
             overflow-y: auto;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             padding: 2px;
             background: #fff0f3;
             border-radius: 4px;
             border: 0.5px solid #ffccd5;
             text-align: left;
+        }
+
+        .chat-input-row {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+
+        .chat-input-row input {
+            flex-grow: 1;
+            padding: 4px 6px;
+            font-size: 0.65rem;
+            border: 1px solid #ff758f;
+            border-radius: 6px;
+            outline: none;
+            color: #4a1525;
+            background: #fff;
+        }
+
+        .chat-send-btn {
+            background: linear-gradient(135deg, #ff4d6d, #d90429);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: bold;
+            cursor: pointer;
         }
 
         .chat-quick-btns {
@@ -281,8 +309,8 @@
             background: #ffe5ec;
             border: 1px solid #ff758f;
             color: #d90429;
-            font-size: 0.58rem;
-            padding: 3px 7px;
+            font-size: 0.55rem;
+            padding: 2px 6px;
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
@@ -476,14 +504,18 @@
         </div>
     </div>
 
-    <!-- FLOATING QUICK CHAT -->
+    <!-- FLOATING CHAT DENGAN INPUT MANUAL & QUICK BUTTONS -->
     <div class="floating-chat-container" id="floating-chat-box">
         <div class="chat-log" id="chat-log-content">💬 <i>Obrolan terhubung...</i></div>
+        <div class="chat-input-row">
+            <input type="text" id="chat-input-field" placeholder="Ketik pesan / godaan..." onkeypress="handleChatKeyPress(event)">
+            <button class="chat-send-btn" onclick="sendTypedChat()">Kirim</button>
+        </div>
         <div class="chat-quick-btns">
-            <button class="quick-btn" onclick="sendQuickChat('Cepat lakuin hukumannya! ⚡')">⚡ Cepat Hukuman</button>
-            <button class="quick-btn" onclick="sendQuickChat('Mana hadiahnya sayang? 🎁')">🎁 Mana Hadiahnya</button>
-            <button class="quick-btn" onclick="sendQuickChat('Jangan lama-lama ya! 😉')">😉 Jangan Lama</button>
-            <button class="quick-btn" onclick="sendQuickChat('Udah siap nih! 🔥')">🔥 Udah Siap</button>
+            <button class="quick-btn" onclick="sendQuickChat('⚡ Cepat lakuin hukumannya!')">⚡ Cepat Hukuman</button>
+            <button class="quick-btn" onclick="sendQuickChat('🎁 Mana hadiahnya sayang?')">🎁 Mana Hadiah</button>
+            <button class="quick-btn" onclick="sendQuickChat('😉 Jangan lama-lama ya!')">😉 Jangan Lama</button>
+            <button class="quick-btn" onclick="sendQuickChat('🔥 Udah siap nih!')">🔥 Udah Siap</button>
         </div>
     </div>
 
@@ -646,7 +678,7 @@
                 } else if (data.type === 'close-modal') {
                     closeModalRemote();
                 } else if (data.type === 'chat-msg') {
-                    appendChatLog(data.sender, data.message, true); // true menandakan pesan dari pasangan (memicu suara)
+                    appendChatLog(data.sender, data.message, true);
                 }
             });
 
@@ -658,7 +690,7 @@
 
         function sendQuickChat(msg) {
             let senderName = (myRole === 'p1') ? "Pria" : "Wanita";
-            appendChatLog(senderName, msg, false); // false berarti pesan dikirim sendiri (tanpa suara notifikasi)
+            appendChatLog(senderName, msg, false);
             if (isOnlineLDR && conn && conn.open) {
                 conn.send({
                     type: 'chat-msg',
@@ -668,12 +700,34 @@
             }
         }
 
+        function sendTypedChat() {
+            const inputField = document.getElementById('chat-input-field');
+            const msg = inputField.value.trim();
+            if (!msg) return;
+
+            let senderName = (myRole === 'p1') ? "Pria" : "Wanita";
+            appendChatLog(senderName, msg, false);
+            if (isOnlineLDR && conn && conn.open) {
+                conn.send({
+                    type: 'chat-msg',
+                    sender: senderName,
+                    message: msg
+                });
+            }
+            inputField.value = '';
+        }
+
+        function handleChatKeyPress(e) {
+            if (e.key === 'Enter') {
+                sendTypedChat();
+            }
+        }
+
         function appendChatLog(sender, msg, isIncoming) {
             const chatLog = document.getElementById('chat-log-content');
             chatLog.innerHTML += `<br><b>${sender}:</b> ${msg}`;
             chatLog.scrollTop = chatLog.scrollHeight;
 
-            // Jika pesan datang dari pasangan, bunyikan suara notifikasi "pling" pendek
             if (isIncoming) {
                 playChatNotificationSound();
             }
@@ -686,9 +740,8 @@
                 let osc = audioCtx.createOscillator();
                 let gain = audioCtx.createGain();
                 osc.type = 'sine';
-                // Nada ganda bernada manis/dingting untuk notifikasi
-                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // Nada D5
-                osc.frequency.setValueAtTime(880.00, audioCtx.currentTime + 0.08); // Nada A5
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(880.00, audioCtx.currentTime + 0.08);
                 
                 gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
