@@ -13,7 +13,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Latar belakang pink lembut dengan aksen pola cinta estetik */
         html, body {
             width: 100%;
             height: 100vh;
@@ -546,7 +545,9 @@
                 </div>
                 
                 <div id="manual-start-area" style="display:none; margin-top: 5px;">
-                    <button class="btn-mulai" onclick="connectAndStartLDR()" style="background: linear-gradient(135deg, #00b4d8, #0077b6); font-size:0.75rem; padding:8px;">▶ Masuk ke Permainan Sekarang</button>
+                    <!-- Tombol khusus tamu untuk meminta izin kamera/mic secara manual lewat klik -->
+                    <button class="btn-mulai" id="btn-request-cam" onclick="requestCameraPermission()" style="background: linear-gradient(135deg, #2b9348, #55a630); font-size:0.75rem; padding:8px; margin-bottom: 4px;">📹 Izinkan Kamera & Mic Dulu</button>
+                    <button class="btn-mulai" id="btn-enter-game" onclick="connectAndStartLDR()" style="background: linear-gradient(135deg, #00b4d8, #0077b6); font-size:0.75rem; padding:8px; display:none;">▶ Masuk ke Permainan Sekarang</button>
                 </div>
 
                 <button class="btn-musik" onclick="backToNormalMenu()" style="width:100%; font-size:0.7rem; padding:5px; margin-top: 5px;">← Kembali</button>
@@ -653,7 +654,7 @@
             });
 
             peer.on('error', (err) => {
-                document.getElementById('waiting-text').innerText = "Gagal terhubung: " + err.type + ". Coba-ulang buka link.";
+                document.getElementById('waiting-text').innerText = "Gagal terhubung: " + err.type;
             });
         }
 
@@ -695,11 +696,24 @@
                 setupPeerConnection();
                 document.getElementById('waiting-text').innerText = "Partner terhubung dengan stabil!";
                 document.getElementById('manual-start-area').style.display = 'block';
+                document.getElementById('btn-request-cam').style.display = 'block';
             });
 
             peer.on('error', (err) => {
                 alert('Error Host: ' + err.type);
             });
+        }
+
+        // Fungsi agar perangkat kedua wajib mengetuk tombol manual untuk meminta izin kamera & mic
+        async function requestCameraPermission() {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                alert("Izin kamera & mikrofon berhasil diberikan! Silakan masuk ke game.");
+                document.getElementById('btn-request-cam').style.display = 'none';
+                document.getElementById('btn-enter-game').style.display = 'block';
+            } catch (err) {
+                alert("Gagal mendapatkan izin kamera/mic: " + err.message + ". Pastikan browser diizinkan mengakses kamera.");
+            }
         }
 
         function connectAndStartLDR() {
@@ -723,8 +737,9 @@
             conn.on('open', () => {
                 document.getElementById('lobby-subtitle').innerText = "Berhasil Terhubung!";
                 if (!isHost) {
-                    document.getElementById('waiting-text').innerText = "Terhubung dengan Host! Klik tombol di bawah.";
+                    document.getElementById('waiting-text').innerText = "Terhubung dengan Host!";
                     document.getElementById('manual-start-area').style.display = 'block';
+                    document.getElementById('btn-request-cam').style.display = 'block'; // Tampilkan tombol izin kamera untuk tamu
                 }
             });
 
@@ -756,7 +771,7 @@
                         remoteVideo.srcObject = remoteStream;
                     });
                 } catch (err) {
-                    alert("Gagal mengakses kamera/mikrofon: " + err.message);
+                    alert("Gagal menjawab panggilan video: " + err.message);
                 }
             });
 
@@ -790,7 +805,7 @@
                     }
                 }
             } catch (err) {
-                alert("Izinkan akses kamera dan mikrofon untuk video call: " + err.message);
+                alert("Izinkan akses kamera dan mikrofon: " + err.message);
             }
         }
 
@@ -802,10 +817,7 @@
                 callObj.close();
                 callObj = null;
             }
-            if (localStream) {
-                localStream.getTracks().forEach(track => track.stop());
-                localStream = null;
-            }
+            // Jangan hentikan track localStream secara permanen agar bisa dipakai di giliran berikutnya
         }
 
         function sendQuickChat(msg) {
@@ -1578,7 +1590,7 @@
 
         function startTimerCountdownRemote(seconds) {
             if (isOnlineLDR) {
-                startVideoCallSession();
+                startVideoCallStatusAndCall();
             }
             const timerBox = document.getElementById('timer-box');
             let m = Math.floor(seconds / 60);
@@ -1586,6 +1598,12 @@
             timerBox.style.display = 'block';
             timerBox.innerText = m > 0 ? `${m}:${s < 10 ? '0' : ''}${s}` : `${seconds}s`;
             runCountdownLogic(seconds);
+        }
+
+        function startVideoCallStatusAndCall() {
+            if (isOnlineLDR) {
+                startVideoCallSession();
+            }
         }
 
         function runCountdownLogic(seconds) {
@@ -1604,7 +1622,7 @@
                 }
             }
 
-        let timeLeft = seconds;
+            let timeLeft = seconds;
             if (countdownInterval) clearInterval(countdownInterval);
 
             countdownInterval = setInterval(() => {
