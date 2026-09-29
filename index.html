@@ -704,24 +704,15 @@
             });
         }
 
+        // Menggunakan format paling sederhana agar kompatibel universal tanpa error Invalid constraint
         async function requestCameraPermission() {
             try {
-                localStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: "user" }, 
-                    audio: true 
-                });
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 alert("Izin kamera & mikrofon berhasil diberikan! Silakan masuk ke game.");
                 document.getElementById('btn-request-cam').style.display = 'none';
                 document.getElementById('btn-enter-game').style.display = 'block';
             } catch (err) {
-                try {
-                    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                    alert("Izin kamera & mikrofon berhasil diberikan! Silakan masuk ke game.");
-                    document.getElementById('btn-request-cam').style.display = 'none';
-                    document.getElementById('btn-enter-game').style.display = 'block';
-                } catch (e) {
-                    alert("Gagal mendapatkan izin kamera/mic: " + e.message);
-                }
+                alert("Gagal mendapatkan izin kamera/mic: " + err.message);
             }
         }
 
@@ -771,10 +762,7 @@
             peer.on('call', async (incomingCall) => {
                 try {
                     if (!localStream) {
-                        localStream = await navigator.mediaDevices.getUserMedia({ 
-                            video: { facingMode: "user" }, 
-                            audio: true 
-                        });
+                        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                     }
                     incomingCall.answer(localStream);
                     callObj = incomingCall;
@@ -800,10 +788,7 @@
 
             try {
                 if (!localStream) {
-                    localStream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { facingMode: "user" }, 
-                        audio: true 
-                    });
+                    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 }
                 const localVideo = document.getElementById('local-video');
                 localVideo.srcObject = localStream;
