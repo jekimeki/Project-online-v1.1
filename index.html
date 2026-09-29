@@ -43,7 +43,7 @@
             backdrop-filter: blur(5px);
             position: absolute;
             top: 0; left: 0;
-            z-index: 2000;
+            z-index: 3000;
         }
 
         .lobby-card {
@@ -239,17 +239,17 @@
             line-height: 1;
         }
 
-        /* Floating Chat (Diposisikan di atas panel kontrol agar sangat mudah terlihat dan diakses) */
+        /* FLOATING CHAT (Z-Index dinaikkan ke 2500 agar berada DI ATAS pop-up modal/hukuman) */
         .floating-chat-container {
             display: none;
             width: 100%;
             max-width: min(85vw, 65vh);
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             border: 1.5px solid #ff758f;
             border-radius: 10px;
             padding: 4px 8px;
-            z-index: 1500;
-            box-shadow: 0 4px 15px rgba(217, 4, 41, 0.25);
+            z-index: 2500;
+            box-shadow: 0 4px 15px rgba(217, 4, 41, 0.3);
             flex-shrink: 0;
             margin-bottom: 3px;
         }
@@ -424,7 +424,7 @@
             background: rgba(74, 21, 37, 0.82);
             justify-content: center;
             align-items: center;
-            z-index: 2000;
+            z-index: 2000; /* Modal berada di bawah chat (2500) agar chat bisa diklik */
         }
 
         .modal-content {
@@ -516,7 +516,7 @@
             </div>
         </div>
 
-        <!-- FLOATING CHAT (Sekarang posisinya pas di atas panel kontrol dadu, dijamin terlihat) -->
+        <!-- FLOATING CHAT (Z-Index diset 2500 agar selalu bisa diklik bahkan saat pop-up modal tantangan/hukuman terbuka) -->
         <div class="floating-chat-container" id="floating-chat-box">
             <div class="chat-log" id="chat-log-content">💬 <i>Obrolan terhubung...</i></div>
             <div class="chat-input-row">
