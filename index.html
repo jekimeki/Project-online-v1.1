@@ -13,6 +13,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* Latar belakang pink lembut dengan aksen pola cinta estetik */
         html, body {
             width: 100%;
             height: 100vh;
@@ -545,7 +546,6 @@
                 </div>
                 
                 <div id="manual-start-area" style="display:none; margin-top: 5px;">
-                    <!-- Tombol khusus tamu untuk meminta izin kamera/mic secara manual lewat klik -->
                     <button class="btn-mulai" id="btn-request-cam" onclick="requestCameraPermission()" style="background: linear-gradient(135deg, #2b9348, #55a630); font-size:0.75rem; padding:8px; margin-bottom: 4px;">📹 Izinkan Kamera & Mic Dulu</button>
                     <button class="btn-mulai" id="btn-enter-game" onclick="connectAndStartLDR()" style="background: linear-gradient(135deg, #00b4d8, #0077b6); font-size:0.75rem; padding:8px; display:none;">▶ Masuk ke Permainan Sekarang</button>
                 </div>
@@ -704,15 +704,24 @@
             });
         }
 
-        // Fungsi agar perangkat kedua wajib mengetuk tombol manual untuk meminta izin kamera & mic
         async function requestCameraPermission() {
             try {
-                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                localStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: "user" }, 
+                    audio: true 
+                });
                 alert("Izin kamera & mikrofon berhasil diberikan! Silakan masuk ke game.");
                 document.getElementById('btn-request-cam').style.display = 'none';
                 document.getElementById('btn-enter-game').style.display = 'block';
             } catch (err) {
-                alert("Gagal mendapatkan izin kamera/mic: " + err.message + ". Pastikan browser diizinkan mengakses kamera.");
+                try {
+                    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    alert("Izin kamera & mikrofon berhasil diberikan! Silakan masuk ke game.");
+                    document.getElementById('btn-request-cam').style.display = 'none';
+                    document.getElementById('btn-enter-game').style.display = 'block';
+                } catch (e) {
+                    alert("Gagal mendapatkan izin kamera/mic: " + e.message);
+                }
             }
         }
 
@@ -739,7 +748,7 @@
                 if (!isHost) {
                     document.getElementById('waiting-text').innerText = "Terhubung dengan Host!";
                     document.getElementById('manual-start-area').style.display = 'block';
-                    document.getElementById('btn-request-cam').style.display = 'block'; // Tampilkan tombol izin kamera untuk tamu
+                    document.getElementById('btn-request-cam').style.display = 'block';
                 }
             });
 
@@ -762,7 +771,10 @@
             peer.on('call', async (incomingCall) => {
                 try {
                     if (!localStream) {
-                        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                        localStream = await navigator.mediaDevices.getUserMedia({ 
+                            video: { facingMode: "user" }, 
+                            audio: true 
+                        });
                     }
                     incomingCall.answer(localStream);
                     callObj = incomingCall;
@@ -788,7 +800,10 @@
 
             try {
                 if (!localStream) {
-                    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    localStream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { facingMode: "user" }, 
+                        audio: true 
+                    });
                 }
                 const localVideo = document.getElementById('local-video');
                 localVideo.srcObject = localStream;
@@ -817,7 +832,6 @@
                 callObj.close();
                 callObj = null;
             }
-            // Jangan hentikan track localStream secara permanen agar bisa dipakai di giliran berikutnya
         }
 
         function sendQuickChat(msg) {
