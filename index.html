@@ -704,15 +704,26 @@
             });
         }
 
-        // Menggunakan format paling sederhana agar kompatibel universal tanpa error Invalid constraint
+        // Pemisahan permintaan audio & video agar aman dan lolos sensor ketat iPhone/Safari
         async function requestCameraPermission() {
             try {
-                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                try {
+                    localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                } catch (e) {}
+
+                let videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                
+                if (localStream) {
+                    videoStream.getTracks().forEach(track => localStream.addTrack(track));
+                } else {
+                    localStream = videoStream;
+                }
+
                 alert("Izin kamera & mikrofon berhasil diberikan! Silakan masuk ke game.");
                 document.getElementById('btn-request-cam').style.display = 'none';
                 document.getElementById('btn-enter-game').style.display = 'block';
             } catch (err) {
-                alert("Gagal mendapatkan izin kamera/mic: " + err.message);
+                alert("Gagal mendapatkan izin: " + err.message + ". Pastikan buka lewat aplikasi Safari, bukan dari dalam WhatsApp.");
             }
         }
 
@@ -762,7 +773,15 @@
             peer.on('call', async (incomingCall) => {
                 try {
                     if (!localStream) {
-                        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                        try {
+                            localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        } catch (e) {}
+                        let vStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                        if (localStream) {
+                            vStream.getTracks().forEach(t => localStream.addTrack(t));
+                        } else {
+                            localStream = vStream;
+                        }
                     }
                     incomingCall.answer(localStream);
                     callObj = incomingCall;
@@ -788,7 +807,15 @@
 
             try {
                 if (!localStream) {
-                    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    try {
+                        localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    } catch (e) {}
+                    let vStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    if (localStream) {
+                        vStream.getTracks().forEach(t => localStream.addTrack(t));
+                    } else {
+                        localStream = vStream;
+                    }
                 }
                 const localVideo = document.getElementById('local-video');
                 localVideo.srcObject = localStream;
