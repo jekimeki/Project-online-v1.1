@@ -150,14 +150,14 @@
 
         header h1 {
             color: #c9184a;
-            font-size: 0.92rem;
+            font-size: 0.9rem;
             margin: 0;
             font-weight: 800;
             text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
         }
 
         .round-badge {
-            font-size: 0.58rem;
+            font-size: 0.55rem;
             background: #ffffff;
             color: #d90429;
             padding: 1px 8px;
@@ -183,7 +183,7 @@
             position: relative;
             aspect-ratio: 1 / 1;
             width: 100%;
-            max-width: min(82vw, 55vh);
+            max-width: min(78vw, 48vh);
             background-color: #d90429;
             padding: 2px;
             border-radius: 8px;
@@ -239,7 +239,7 @@
             line-height: 1;
         }
 
-        /* FLOATING CHAT */
+        /* FLOATING CHAT (Posisi tetap di bawah, aman tidak diturunkan) */
         .floating-chat-container {
             display: none;
             width: 100%;
@@ -251,15 +251,15 @@
             z-index: 2500;
             box-shadow: 0 4px 15px rgba(217, 4, 41, 0.3);
             flex-shrink: 0;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .chat-log {
-            font-size: 0.58rem;
+            font-size: 0.55rem;
             color: #590d22;
-            max-height: 32px;
+            max-height: 28px;
             overflow-y: auto;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
             padding: 2px;
             background: #fff0f3;
             border-radius: 4px;
@@ -270,13 +270,13 @@
         .chat-input-row {
             display: flex;
             gap: 4px;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .chat-input-row input {
             flex-grow: 1;
-            padding: 5px 8px;
-            font-size: 0.7rem;
+            padding: 4px 6px;
+            font-size: 0.68rem;
             border: 1px solid #ff758f;
             border-radius: 6px;
             outline: none;
@@ -288,9 +288,9 @@
             background: linear-gradient(135deg, #ff4d6d, #d90429);
             color: white;
             border: none;
-            padding: 5px 10px;
+            padding: 4px 8px;
             border-radius: 6px;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: bold;
             cursor: pointer;
         }
@@ -307,8 +307,8 @@
             background: #ffe5ec;
             border: 1px solid #ff758f;
             color: #d90429;
-            font-size: 0.55rem;
-            padding: 2px 6px;
+            font-size: 0.52rem;
+            padding: 2px 5px;
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
@@ -367,14 +367,14 @@
         }
 
         .dice-btn {
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             border: 2px solid #fff;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             color: white;
             cursor: pointer;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
@@ -386,7 +386,7 @@
         .dice-btn:active { transform: scale(0.92); }
 
         .dadu-status-text {
-            font-size: 0.48rem;
+            font-size: 0.45rem;
             font-weight: bold;
             color: #800f2f;
         }
@@ -417,66 +417,65 @@
         .token-1 { background-color: #ef233c; } 
         .token-2 { background-color: #3a86ff; } 
 
-        /* Modal Tantangan & Video Call Ala WhatsApp */
+        /* MODAL POP-UP (Dinaikkan posisinya & dibatasi ukurannya agar tidak menutupi chat bawah) */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(74, 21, 37, 0.88);
+            background: rgba(74, 21, 37, 0.85);
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Geser pop-up ke atas */
+            padding-top: 15px;
             z-index: 2000;
         }
 
         .modal-content {
             background: #fff0f3;
             border: 2px solid #d90429;
-            padding: 10px 12px;
+            padding: 8px 12px;
             border-radius: 14px;
             text-align: center;
-            max-width: 320px;
-            width: 92%;
+            max-width: 300px;
+            width: 90%;
             box-shadow: 0 8px 25px rgba(89, 13, 34, 0.4);
-            max-height: 92vh;
+            max-height: 75vh; /* Batasi tinggi modal agar bagian bawah layar (chat) tetap longgar */
             overflow-y: auto;
         }
 
-        .modal-content h3 { color: #d90429; margin-top: 0; font-size: 0.85rem; }
-        .modal-content p { font-size: 0.7rem; color: #590d22; line-height: 1.25; margin: 4px 0; }
-        .modal-illustration { background: #ffe5ec; border: 1px dashed #ff758f; border-radius: 6px; padding: 5px; font-size: 0.62rem; color: #800f2f; margin: 4px 0; text-align: left; }
+        .modal-content h3 { color: #d90429; margin-top: 0; font-size: 0.8rem; }
+        .modal-content p { font-size: 0.65rem; color: #590d22; line-height: 1.2; margin: 3px 0; }
+        .modal-illustration { background: #ffe5ec; border: 1px dashed #ff758f; border-radius: 6px; padding: 4px; font-size: 0.58rem; color: #800f2f; margin: 3px 0; text-align: left; }
 
-        /* Container Video Call Style WhatsApp (Lawan Besar di Latar, Diri Sendiri Kecil Melayang) */
+        /* Container Video Call WhatsApp Style dalam Modal yang Lebih Kompak */
         .video-container-wa {
             display: none;
             position: relative;
             width: 100%;
-            aspect-ratio: 4 / 5;
+            aspect-ratio: 1 / 1; /* Dibuat lebih ringkas agar muat di layar */
             background: #000;
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
-            margin: 6px 0;
+            margin: 4px 0;
             border: 1.5px solid #ff758f;
         }
 
-        /* Video Lawan (Besar / Full) */
         #remote-video {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        /* Video Diri Sendiri (Kecil di Pojok Kanan Atas) */
         .self-video-box {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 75px;
+            top: 6px;
+            right: 6px;
+            width: 65px;
             aspect-ratio: 3 / 4;
             background: #222;
-            border-radius: 6px;
+            border-radius: 5px;
             overflow: hidden;
             border: 1.5px solid #fff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
             z-index: 10;
         }
 
@@ -492,16 +491,16 @@
             left: 4px;
             background: rgba(0,0,0,0.6);
             color: #fff;
-            font-size: 0.48rem;
-            padding: 1px 4px;
+            font-size: 0.45rem;
+            padding: 1px 3px;
             border-radius: 3px;
         }
 
         .timer-display {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 900;
             color: #d90429;
-            margin: 4px 0;
+            margin: 3px 0;
             background: #fff;
             border: 1.5px dashed #ff758f;
             border-radius: 6px;
@@ -511,14 +510,14 @@
 
         .btn-action-group {
             display: flex;
-            gap: 5px;
+            gap: 4px;
             justify-content: center;
-            margin-top: 5px;
+            margin-top: 4px;
             flex-wrap: wrap;
         }
 
-        .btn-start-timer { background: linear-gradient(135deg, #2b9348, #55a630); color: white; border: none; padding: 6px 12px; border-radius: 8px; font-weight: bold; font-size: 0.7rem; cursor: pointer; width: 100%; }
-        .btn-action, .btn-skip { background: linear-gradient(45deg, #ef233c, #d90429); color: white; border: none; padding: 5px 10px; border-radius: 8px; font-weight: bold; font-size: 0.68rem; cursor: pointer; }
+        .btn-start-timer { background: linear-gradient(135deg, #2b9348, #55a630); color: white; border: none; padding: 5px 10px; border-radius: 8px; font-weight: bold; font-size: 0.65rem; cursor: pointer; width: 100%; }
+        .btn-action, .btn-skip { background: linear-gradient(45deg, #ef233c, #d90429); color: white; border: none; padding: 4px 8px; border-radius: 8px; font-weight: bold; font-size: 0.65rem; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -570,7 +569,7 @@
             </div>
         </div>
 
-        <!-- FLOATING CHAT -->
+        <!-- FLOATING CHAT (Posisi tetap di bawah, aman tidak diturunkan/tertutup) -->
         <div class="floating-chat-container" id="floating-chat-box">
             <div class="chat-log" id="chat-log-content">💬 <i>Obrolan terhubung...</i></div>
             <div class="chat-input-row">
@@ -610,7 +609,7 @@
             <p id="modal-text">Tantangan...</p>
             <div id="modal-illustration-container"></div>
             
-            <!-- Video Call Style WhatsApp (Lawan Besar di Belakang, Diri Sendiri Kecil di Pojok Kanan Atas) -->
+            <!-- Video Call Style WhatsApp (Dinaikkan posisinya agar rapi) -->
             <div class="video-container-wa" id="video-container-wa">
                 <video id="remote-video" autoplay playsinline></video>
                 <div class="video-label-wa">Pasangan</div>
